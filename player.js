@@ -8,10 +8,11 @@ export class Player {
 		this.image = document.getElementById("player");
 		this.speed = 0;
 		this.maxSpeed = 10;
+		this.vy = 0;
+		this.weight = 1;
 	}
 
 	draw(context) {
-		// context.fillRect(this.x, this.y, this.width, this.height);
 		context.drawImage(
 			this.image,
 			0,
@@ -39,5 +40,19 @@ export class Player {
 		} else if (this.x + this.width > this.game.width) {
 			this.x = this.game.width - this.width;
 		}
+		// vertical movement
+		if (input.includes("ArrowUp") && this.onGround()) {
+			this.vy -= 20;
+		}
+		this.y += this.vy;
+		if (!this.onGround()) {
+			this.vy += this.weight;
+		} else {
+			this.vy = 0;
+		}
+	}
+
+	onGround() {
+		return this.y >= this.game.height - this.height;
 	}
 }
