@@ -44,6 +44,8 @@ class Enemy {
 	}
 }
 
+//////////////////////////////////
+
 export class FlyingEnemy extends Enemy {
 	constructor(game) {
 		super();
@@ -56,27 +58,65 @@ export class FlyingEnemy extends Enemy {
 		this.speedY = 0;
 		this.maxFrame = 5;
 		this.image = document.getElementById("enemy_fly");
+		this.angle = 0;
+		this.va = Math.random() * 0.1 + 0.1;
 	}
 
 	update(deltaTime) {
 		super.update(deltaTime);
+		this.angle += this.va;
+		this.y += Math.sin(this.angle);
 	}
 }
+
+//////////////////////////////////
 
 export class GroundEnemy extends Enemy {
 	constructor(game) {
 		super();
 		this.game = game;
 		this.width = 60;
-		this.height = 44;
+		this.height = 87;
+		this.x = this.game.width;
+		this.y = this.game.height - this.height - this.game.groundMargin;
+		this.image = document.getElementById("enemy_plant");
+		this.speedX = 0;
+		this.speedY = 0;
+		this.maxFrame = 1;
 	}
 }
+
+//////////////////////////////////
 
 export class ClimbingEnemy extends Enemy {
 	constructor(game) {
 		super();
 		this.game = game;
-		this.width = 60;
-		this.height = 44;
+		this.width = 120;
+		this.height = 144;
+		this.x = this.game.width;
+		this.y = Math.random() * (this.game.height * 0.5);
+		this.image = document.getElementById("enemy_spider");
+		this.maxFrame = 5;
+		this.speedX = 0;
+		this.speedY = Math.random() > 0.5 ? 1 : -1;
+	}
+
+	update(deltaTime) {
+		super.update(deltaTime);
+		if (this.y > this.game.height - this.height - this.game.groundMargin) {
+			this.speedY *= -1;
+		}
+		if (this.y < -this.height) {
+			this.markedForDeletion = true;
+		}
+	}
+
+	draw(context) {
+		super.draw(context);
+		context.beginPath();
+		context.moveTo(this.x + this.width * 0.5, 0);
+		context.lineTo(this.x + this.width * 0.5, this.y + this.height * 0.5);
+		context.stroke();
 	}
 }

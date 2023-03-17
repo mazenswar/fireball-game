@@ -1,19 +1,19 @@
 import { Background } from "./background.js";
 import { InputHandler } from "./inputHandler.js";
 import { Player } from "./player.js";
-import { FlyingEnemy } from "./enemies.js";
+import { ClimbingEnemy, FlyingEnemy, GroundEnemy } from "./enemies.js";
 
 addEventListener("load", () => {
 	const canvas = document.getElementById("canvas");
 	const ctx = canvas.getContext("2d");
 	canvas.height = 500;
-	canvas.width = 500;
+	canvas.width = 800;
 
 	class Game {
 		constructor({ width, height }) {
 			this.width = width;
 			this.height = height;
-			this.groundMargin = 50;
+			this.groundMargin = 80;
 			this.speed = 0;
 			this.maxSpeed = 5;
 			this.background = new Background(this);
@@ -50,6 +50,11 @@ addEventListener("load", () => {
 		}
 
 		addEnemy() {
+			if (this.speed > 0 && Math.random() < 0.5) {
+				this.enemies.push(new GroundEnemy(this));
+			} else if (this.speed > 0) {
+				this.enemies.push(new ClimbingEnemy(this));
+			}
 			this.enemies.push(new FlyingEnemy(this));
 		}
 	}
