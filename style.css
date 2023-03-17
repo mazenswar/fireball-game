@@ -16,6 +16,11 @@ body {
 	border: 1px solid black;
 }
 
-#player {
+#player,
+#layer-1,
+#layer-2,
+#layer-3,
+#layer-4,
+#layer-5 {
 	display: none;
 }
