@@ -14,8 +14,8 @@ addEventListener("load", () => {
 			this.player = new Player(this);
 			this.input = new InputHandler();
 		}
-		update() {
-			this.player.update(this.input.keys);
+		update(deltaTime) {
+			this.player.update(this.input.keys, deltaTime);
 		}
 
 		draw() {
@@ -26,14 +26,15 @@ addEventListener("load", () => {
 
 	const game = new Game({ width: canvas.width, height: canvas.height });
 	console.log(game);
-
+	let lastTime = 0;
 	// animate
-	function animate() {
+	function animate(timeStamp) {
+		const deltaTime = timeStamp - lastTime;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		game.draw(ctx);
-		game.update();
+		game.update(deltaTime);
 		requestAnimationFrame(animate);
 	}
-	animate();
+	animate(0);
 	// END OF LOAD LISTENER
 });

@@ -14,6 +14,10 @@ export class Player {
 		this.weight = 1;
 		this.frameX = 0;
 		this.frameY = 0;
+		this.maxFrame;
+		this.fps = 20;
+		this.frameInterval = 1000 / this.fps;
+		this.frameTimer = 0;
 		this.states = [
 			new Sitting(this),
 			new Running(this),
@@ -37,7 +41,7 @@ export class Player {
 			this.height
 		);
 	}
-	update(input) {
+	update(input, deltaTime) {
 		this.currentState.handleInput(input);
 		// horizontal movement
 		this.x += this.speed;
@@ -54,7 +58,6 @@ export class Player {
 			this.x = this.game.width - this.width;
 		}
 		// vertical movement
-
 		this.y += this.vy;
 		if (!this.onGround()) {
 			this.vy += this.weight;
@@ -62,6 +65,18 @@ export class Player {
 			this.vy = 0;
 		}
 		// sprite animation
+		// console.log(this.frameTimer);
+		if (this.frameTimer > this.frameInterval) {
+			console.log("first");
+			this.frameTimer = 0;
+			if (this.frameX < this.maxFrame) {
+				this.frameX++;
+			} else {
+				this.frameX = 0;
+			}
+		} else {
+			this.frameTimer += deltaTime;
+		}
 	}
 
 	onGround() {
