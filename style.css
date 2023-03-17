@@ -21,6 +21,9 @@ body {
 #layer-2,
 #layer-3,
 #layer-4,
-#layer-5 {
+#layer-5,
+#enemy_fly,
+#enemy_plant,
+#enemy_spider {
 	display: none;
 }

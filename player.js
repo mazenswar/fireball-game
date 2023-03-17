@@ -67,7 +67,6 @@ export class Player {
 		// sprite animation
 		// console.log(this.frameTimer);
 		if (this.frameTimer > this.frameInterval) {
-			console.log("first");
 			this.frameTimer = 0;
 			if (this.frameX < this.maxFrame) {
 				this.frameX++;
