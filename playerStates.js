@@ -1,4 +1,4 @@
-import { Dust } from "./Particle.js";
+import { Dust, Fire } from "./Particle.js";
 
 const states = {
 	SITTING: 0,
@@ -48,7 +48,11 @@ export class Running extends State {
 	}
 	handleInput(input) {
 		this.game.particles.push(
-			new Dust(this.game, this.game.player.x, this.game.player.y)
+			new Dust(
+				this.game,
+				this.game.player.x + this.game.player.height * 0.5,
+				this.game.height - this.game.groundMargin
+			)
 		);
 		if (input.includes("ArrowDown")) {
 			this.game.player.setState(states.SITTING, 0);
@@ -112,6 +116,13 @@ export class Rolling extends State {
 		this.game.player.frameY = 6;
 	}
 	handleInput(input) {
+		this.game.particles.push(
+			new Fire(
+				this.game,
+				this.game.player.x + this.game.player.width * 0.5,
+				this.game.player.height * 0.5 + this.game.player.y
+			)
+		);
 		if (!input.includes("Enter") && this.game.player.onGround()) {
 			this.game.player.setState(states.RUNNNING, 1);
 		} else if (!input.includes("Enter") && !this.game.player.onGround()) {
