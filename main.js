@@ -1,6 +1,7 @@
 import { Background } from "./background.js";
 import { InputHandler } from "./inputHandler.js";
 import { Player } from "./player.js";
+import { UI } from "./UI.js";
 import { ClimbingEnemy, FlyingEnemy, GroundEnemy } from "./enemies.js";
 
 addEventListener("load", () => {
@@ -11,6 +12,10 @@ addEventListener("load", () => {
 
 	class Game {
 		constructor({ width, height }) {
+			this.score = 0;
+			this.fontColor = "black";
+			this.debugMode = true;
+			this.UI = new UI(this);
 			this.width = width;
 			this.height = height;
 			this.groundMargin = 80;
@@ -18,7 +23,7 @@ addEventListener("load", () => {
 			this.maxSpeed = 5;
 			this.background = new Background(this);
 			this.player = new Player(this);
-			this.input = new InputHandler();
+			this.input = new InputHandler(this);
 			this.enemies = [];
 			this.enemyTimer = 0;
 			this.enemyInterval = 2000;
@@ -47,6 +52,7 @@ addEventListener("load", () => {
 			this.enemies.forEach((enemy) => {
 				enemy.draw(ctx);
 			});
+			this.UI.draw(ctx);
 		}
 
 		addEnemy() {
