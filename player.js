@@ -87,4 +87,19 @@ export class Player {
 		this.game.speed = this.game.maxSpeed * speed;
 		this.currentState.enter();
 	}
+
+	checkCollision() {
+		this.game.enemies.forEach((enemy) => {
+			if (
+				this.x + this.width > enemy.x &&
+				this.x + this.width < enemy.x + enemy.width &&
+				this.y < enemy.y + enemy.height &&
+				this.y + this.height > enemy.y
+			) {
+				// collision detected
+			} else {
+				// no collission
+			}
+		});
+	}
 }
