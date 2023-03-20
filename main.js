@@ -25,8 +25,11 @@ addEventListener("load", () => {
 			this.player = new Player(this);
 			this.input = new InputHandler(this);
 			this.enemies = [];
+			this.particles = [];
 			this.enemyTimer = 0;
 			this.enemyInterval = 2000;
+			this.player.currentState = this.player.states[0];
+			this.player.currentState.enter();
 		}
 		update(deltaTime) {
 			this.background.update();
@@ -44,6 +47,13 @@ addEventListener("load", () => {
 					this.enemies.splice(this.enemies.indexOf(enemy), 1);
 				}
 			});
+			// handle particles
+			this.particles.forEach((particle, index) => {
+				particle.update();
+				if (particle.markedForDeletion) {
+					this.particles.splice(index, 1);
+				}
+			});
 		}
 
 		draw() {
@@ -53,6 +63,10 @@ addEventListener("load", () => {
 				enemy.draw(ctx);
 			});
 			this.UI.draw(ctx);
+			// handle particles
+			this.particles.forEach((particle) => {
+				particle.draw(ctx);
+			});
 		}
 
 		addEnemy() {
