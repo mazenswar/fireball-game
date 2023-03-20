@@ -23,8 +23,6 @@ export class Dust extends Particle {
 		this.speedX = Math.random();
 		this.speedY = Math.random();
 		this.color = "rgba(0,0,0,0.2)";
-		this.angle = 0;
-		this.va = Math.random() * 0.2 - 0.1;
 	}
 
 	draw(context) {
@@ -46,11 +44,14 @@ export class Fire extends Particle {
 		this.size = Math.random() * 100 + 50;
 		this.speedX = 1;
 		this.speedY = 1;
+		this.angle = 0;
+		this.va = Math.random() * 0.2 - 0.1;
 	}
 
 	update() {
 		super.update();
 		this.angle += this.va;
+		this.x += Math.sin(this.angle * 10);
 	}
 
 	draw(context) {

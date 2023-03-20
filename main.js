@@ -26,6 +26,7 @@ addEventListener("load", () => {
 			this.input = new InputHandler(this);
 			this.enemies = [];
 			this.particles = [];
+			this.maxParticles = 100;
 			this.enemyTimer = 0;
 			this.enemyInterval = 2000;
 			this.player.currentState = this.player.states[0];
@@ -54,6 +55,9 @@ addEventListener("load", () => {
 					this.particles.splice(index, 1);
 				}
 			});
+			if (this.particles.length > this.maxParticles) {
+				this.particles = this.particles.slice(0, this.maxParticles);
+			}
 		}
 
 		draw() {
