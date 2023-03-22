@@ -13,8 +13,9 @@ addEventListener("load", () => {
 	class Game {
 		constructor({ width, height }) {
 			this.score = 0;
-			this.winningScore = 20;
-			this.fontColor = "black";
+			this.winningScore = 15;
+			this.fontColor = "orange";
+			this.shadowColor = "black";
 			this.debugMode = false;
 			this.UI = new UI(this);
 			this.width = width;
@@ -32,16 +33,17 @@ addEventListener("load", () => {
 			this.maxParticles = 100;
 			this.enemyTimer = 0;
 			this.enemyInterval = 2000;
-			this.time = 0;
 			this.maxTime = 1000 * 30;
+			this.time = this.maxTime;
 			this.gameOver = false;
 			this.player.currentState = this.player.states[0];
 			this.player.currentState.enter();
 		}
 		update(deltaTime) {
 			// game end condition
-			this.time += deltaTime;
-			if (this.time > this.maxTime) {
+			this.time -= deltaTime;
+			if (this.time < 1) {
+				this.time = 0;
 				this.gameOver = true;
 			}
 			this.background.update();

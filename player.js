@@ -145,8 +145,18 @@ export class Player {
 						)
 					);
 				} else {
+					this.game.floatingMessages.push(
+						new FloatingMessage(
+							"-1",
+							enemy.x + enemy.width * 0.5,
+							enemy.y + enemy.height * 0.5,
+							0,
+							0
+						)
+					);
 					this.setState(6, 0);
-					this.lives -= 1;
+					this.lives++;
+					this.game.score--;
 					if (this.lives <= 0) {
 						this.game.gameOver = true;
 					}
