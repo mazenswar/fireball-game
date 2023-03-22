@@ -7,6 +7,7 @@ import {
 	Diving,
 	Hit,
 } from "./playerStates.js";
+import { CollisionAnimation } from "./collisionAnimation.js";
 
 export class Player {
 	constructor(game) {
@@ -65,10 +66,15 @@ export class Player {
 		} else {
 			this.speed = 0;
 		}
+		// horizontal boundaries
 		if (this.x < 0) {
 			this.x = 0;
 		} else if (this.x + this.width > this.game.width) {
 			this.x = this.game.width - this.width;
+		}
+		// vertical boundaries
+		if (this.y > this.game.height - this.height - this.game.groundMargin) {
+			this.y = this.game.height - this.height - this.game.groundMargin;
 		}
 		// vertical movement
 		this.y += this.vy;
@@ -110,6 +116,13 @@ export class Player {
 			) {
 				// collision detected
 				// markedForDeletion
+				this.game.collisions.push(
+					new CollisionAnimation(
+						this.game,
+						enemy.x + enemy.width * 0.5,
+						enemy.y + enemy.height * 0.5
+					)
+				);
 				enemy.markedForDeletion = true;
 				if (
 					this.currentState === this.states[4] ||

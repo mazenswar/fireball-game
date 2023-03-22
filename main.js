@@ -13,6 +13,7 @@ addEventListener("load", () => {
 	class Game {
 		constructor({ width, height }) {
 			this.score = 0;
+			this.winningScore = 2;
 			this.fontColor = "black";
 			this.debugMode = true;
 			this.UI = new UI(this);
@@ -26,13 +27,22 @@ addEventListener("load", () => {
 			this.input = new InputHandler(this);
 			this.enemies = [];
 			this.particles = [];
+			this.collisions = [];
 			this.maxParticles = 100;
 			this.enemyTimer = 0;
 			this.enemyInterval = 2000;
+			this.time = 0;
+			this.maxTime = 1000 * 10;
+			this.gameOver = false;
 			this.player.currentState = this.player.states[0];
 			this.player.currentState.enter();
 		}
 		update(deltaTime) {
+			// game end condition
+			this.time += deltaTime;
+			if (this.time > this.maxTime) {
+				this.gameOver = true;
+			}
 			this.background.update();
 			this.player.update(this.input.keys, deltaTime);
 			// handle enemies
@@ -55,9 +65,17 @@ addEventListener("load", () => {
 					this.particles.splice(index, 1);
 				}
 			});
+			// max particles
 			if (this.particles.length > this.maxParticles) {
 				this.particles = this.particles.slice(0, this.maxParticles);
 			}
+			// collision animation
+			this.collisions.forEach((collision, index) => {
+				collision.update(deltaTime);
+				if (collision.markedForDeletion) {
+					this.collisions.splice(index, 1);
+				}
+			});
 		}
 
 		draw() {
@@ -70,6 +88,10 @@ addEventListener("load", () => {
 			// handle particles
 			this.particles.forEach((particle) => {
 				particle.draw(ctx);
+			});
+			// collision animation
+			this.collisions.forEach((collision) => {
+				collision.draw(ctx);
 			});
 		}
 
@@ -91,9 +113,11 @@ addEventListener("load", () => {
 		const deltaTime = timeStamp - lastTime;
 		lastTime = timeStamp;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		game.draw(ctx);
 		game.update(deltaTime);
-		requestAnimationFrame(animate);
+		game.draw(ctx);
+		if (!game.gameOver) {
+			requestAnimationFrame(animate);
+		}
 	}
 	animate(0);
 	// END OF LOAD LISTENER
