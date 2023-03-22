@@ -8,10 +8,12 @@ import {
 	Hit,
 } from "./playerStates.js";
 import { CollisionAnimation } from "./collisionAnimation.js";
+import { FloatingMessage } from "./floatingMessages.js";
 
 export class Player {
 	constructor(game) {
 		this.game = game;
+		this.lives = 5;
 		this.width = 100;
 		this.height = 91.3;
 		this.x = 0;
@@ -36,6 +38,7 @@ export class Player {
 			new Diving(this.game),
 			new Hit(this.game),
 		];
+		this.currentState = null;
 	}
 
 	draw(context) {
@@ -118,7 +121,6 @@ export class Player {
 				this.y + this.height > enemy.y
 			) {
 				// collision detected
-				// markedForDeletion
 				this.game.collisions.push(
 					new CollisionAnimation(
 						this.game,
@@ -127,13 +129,27 @@ export class Player {
 					)
 				);
 				enemy.markedForDeletion = true;
+
 				if (
 					this.currentState === this.states[4] ||
 					this.currentState === this.states[5]
 				) {
 					this.game.score++;
+					this.game.floatingMessages.push(
+						new FloatingMessage(
+							"+1",
+							enemy.x + enemy.width * 0.5,
+							enemy.y + enemy.height * 0.5,
+							0,
+							0
+						)
+					);
 				} else {
 					this.setState(6, 0);
+					this.lives -= 1;
+					if (this.lives <= 0) {
+						this.game.gameOver = true;
+					}
 				}
 			}
 		});

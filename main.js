@@ -8,18 +8,18 @@ addEventListener("load", () => {
 	const canvas = document.getElementById("canvas");
 	const ctx = canvas.getContext("2d");
 	canvas.height = 500;
-	canvas.width = 800;
+	canvas.width = 900;
 
 	class Game {
 		constructor({ width, height }) {
 			this.score = 0;
-			this.winningScore = 2;
+			this.winningScore = 20;
 			this.fontColor = "black";
-			this.debugMode = true;
+			this.debugMode = false;
 			this.UI = new UI(this);
 			this.width = width;
 			this.height = height;
-			this.groundMargin = 80;
+			this.groundMargin = 50;
 			this.speed = 0;
 			this.maxSpeed = 5;
 			this.background = new Background(this);
@@ -28,6 +28,7 @@ addEventListener("load", () => {
 			this.enemies = [];
 			this.particles = [];
 			this.collisions = [];
+			this.floatingMessages = [];
 			this.maxParticles = 100;
 			this.enemyTimer = 0;
 			this.enemyInterval = 2000;
@@ -54,16 +55,14 @@ addEventListener("load", () => {
 			}
 			this.enemies.forEach((enemy) => {
 				enemy.update(deltaTime);
-				if (enemy.markedForDeletion) {
-					this.enemies.splice(this.enemies.indexOf(enemy), 1);
-				}
+			});
+			// floating messages
+			this.floatingMessages.forEach((message) => {
+				message.update();
 			});
 			// handle particles
 			this.particles.forEach((particle, index) => {
 				particle.update();
-				if (particle.markedForDeletion) {
-					this.particles.splice(index, 1);
-				}
 			});
 			// max particles
 			if (this.particles.length > this.maxParticles) {
@@ -72,26 +71,39 @@ addEventListener("load", () => {
 			// collision animation
 			this.collisions.forEach((collision, index) => {
 				collision.update(deltaTime);
-				if (collision.markedForDeletion) {
-					this.collisions.splice(index, 1);
-				}
 			});
+			// remove marked for delete
+			this.collisions = this.collisions.filter(
+				(collision) => !collision.markedForDeletion
+			);
+			this.enemies = this.enemies.filter((enemy) => !enemy.markedForDeletion);
+			this.particles = this.particles.filter(
+				(particle) => !particle.markedForDeletion
+			);
+			this.floatingMessages = this.floatingMessages.filter(
+				(message) => !message.markedForDeletion
+			);
 		}
 
-		draw() {
-			this.background.draw(ctx);
-			this.player.draw(ctx);
+		draw(context) {
+			this.background.draw(context);
+			this.player.draw(context);
 			this.enemies.forEach((enemy) => {
-				enemy.draw(ctx);
+				enemy.draw(context);
 			});
-			this.UI.draw(ctx);
+			this.UI.draw(context);
+			// floating messages
+
+			this.floatingMessages.forEach((message) => {
+				message.draw(context);
+			});
 			// handle particles
 			this.particles.forEach((particle) => {
-				particle.draw(ctx);
+				particle.draw(context);
 			});
 			// collision animation
 			this.collisions.forEach((collision) => {
-				collision.draw(ctx);
+				collision.draw(context);
 			});
 		}
 

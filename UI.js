@@ -2,11 +2,17 @@ export class UI {
 	constructor(game) {
 		this.game = game;
 		this.fontSize = 30;
-		this.fontFamily = "Helvetica";
+		this.fontFamily = "Creepster";
+		this.livesImage = document.getElementById("lives");
 	}
 
 	draw(context) {
 		context.save();
+
+		// lives
+		for (let i = 0; i < this.game.player.lives; i++) {
+			context.drawImage(this.livesImage, 25 * i + 20, 100, 30, 30);
+		}
 		context.shadowOffsetX = 2;
 		context.shadowOffsetY = 2;
 		context.shadowColor = "white";
