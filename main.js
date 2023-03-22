@@ -32,7 +32,7 @@ addEventListener("load", () => {
 			this.enemyTimer = 0;
 			this.enemyInterval = 2000;
 			this.time = 0;
-			this.maxTime = 1000 * 10;
+			this.maxTime = 1000 * 30;
 			this.gameOver = false;
 			this.player.currentState = this.player.states[0];
 			this.player.currentState.enter();
@@ -67,7 +67,7 @@ addEventListener("load", () => {
 			});
 			// max particles
 			if (this.particles.length > this.maxParticles) {
-				this.particles = this.particles.slice(0, this.maxParticles);
+				this.particles.length = this.maxParticles;
 			}
 			// collision animation
 			this.collisions.forEach((collision, index) => {
