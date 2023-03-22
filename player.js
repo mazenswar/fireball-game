@@ -1,4 +1,11 @@
-import { Sitting, Running, Jumping, Falling, Rolling } from "./playerStates.js";
+import {
+	Sitting,
+	Running,
+	Jumping,
+	Falling,
+	Rolling,
+	Diving,
+} from "./playerStates.js";
 
 export class Player {
 	constructor(game) {
@@ -24,6 +31,7 @@ export class Player {
 			new Jumping(this.game),
 			new Falling(this.game),
 			new Rolling(this.game),
+			new Diving(this.game),
 		];
 	}
 
@@ -68,7 +76,6 @@ export class Player {
 			this.vy = 0;
 		}
 		// sprite animation
-		// console.log(this.frameTimer);
 		if (this.frameTimer > this.frameInterval) {
 			this.frameTimer = 0;
 			if (this.frameX < this.maxFrame) {
